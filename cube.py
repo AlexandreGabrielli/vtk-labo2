@@ -14,14 +14,21 @@ def read_in_file(filename):
     reader.Update()
     return reader
 
-
-def cube_with_square(vertices, pts):
+def init_cube(vertices):
     cube_data = vtk.vtkPolyData()
     points = vtk.vtkPoints()
     polys = vtk.vtkCellArray()
 
     for i in range(8):
         points.InsertPoint(i, vertices[i])
+
+    return cube_data, points, polys
+
+def cube_with_square(vertices):
+    pts = [(0, 1, 2), (4, 5, 6, 7), (0, 1, 5, 4),
+           (1, 2, 6, 5), (2, 3, 7, 6), (3, 0, 4, 7)]
+
+    cube_data, points, polys = init_cube(vertices)
 
     for i in range(6):
         polys.InsertNextCell(4, pts[i])
@@ -31,15 +38,28 @@ def cube_with_square(vertices, pts):
 
     return cube_data
 
+def cube_with_triangle(vertices):
+    pts = [(0, 1, 2), (0, 2, 3), (0, 3, 4), (0, 1, 5),
+           (0, 4, 5), (4, 5, 6), (4, 6, 7), (3, 4, 7),
+           (1, 2, 5), (2, 5, 6), (2, 3, 6), (3, 6, 7)]
+
+    cube_data, points, polys = init_cube(vertices)
+
+    for i in range(12):
+        polys.InsertNextCell(3, pts[i])
+
+    cube_data.SetPoints(points)
+    cube_data.SetPolys(polys)
+
+    return cube_data
+
+
 
 def main():
     vertices = [(0.0, 0.0, 0.0), (1.0, 0.0, 0.0), (1.0, 1.0, 0.0), (0.0, 1.0, 0.0),
                 (0.0, 0.0, 1.0), (1.0, 0.0, 1.0), (1.0, 1.0, 1.0), (0.0, 1.0, 1.0)]
 
-    pts = [(0, 1, 2, 3), (4, 5, 6, 7), (0, 1, 5, 4),
-           (1, 2, 6, 5), (2, 3, 7, 6), (3, 0, 4, 7)]
-
-    cube_shape = cube_with_square(vertices, pts)
+    cube_shape = cube_with_triangle(vertices)
 
     FILENAME = 'cube.vtk'
     write_in_file(FILENAME, cube_shape)
