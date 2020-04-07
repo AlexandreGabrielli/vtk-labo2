@@ -59,6 +59,7 @@ def main():
     vertices = [(0.0, 0.0, 0.0), (1.0, 0.0, 0.0), (1.0, 1.0, 0.0), (0.0, 1.0, 0.0),
                 (0.0, 0.0, 1.0), (1.0, 0.0, 1.0), (1.0, 1.0, 1.0), (0.0, 1.0, 1.0)]
 
+    #cube_shape = cube_with_square(vertices)
     cube_shape = cube_with_triangle(vertices)
 
     FILENAME = 'cube.vtk'
