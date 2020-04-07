@@ -1,10 +1,12 @@
 import vtk
 
-def write_in_file(filename,data):
+
+def write_in_file(filename, data):
     writer = vtk.vtkPolyDataWriter()
     writer.SetFileName(filename)
     writer.SetInputData(data)
     writer.Write()
+
 
 def read_in_file(filename):
     reader = vtk.vtkPolyDataReader()
@@ -12,7 +14,8 @@ def read_in_file(filename):
     reader.Update()
     return reader
 
-def cube(vertices,pts):
+
+def cube_with_square(vertices, pts):
     cube_data = vtk.vtkPolyData()
     points = vtk.vtkPoints()
     polys = vtk.vtkCellArray()
@@ -29,15 +32,14 @@ def cube(vertices,pts):
     return cube_data
 
 
-
 def main():
     vertices = [(0.0, 0.0, 0.0), (1.0, 0.0, 0.0), (1.0, 1.0, 0.0), (0.0, 1.0, 0.0),
-         (0.0, 0.0, 1.0), (1.0, 0.0, 1.0), (1.0, 1.0, 1.0), (0.0, 1.0, 1.0)]
+                (0.0, 0.0, 1.0), (1.0, 0.0, 1.0), (1.0, 1.0, 1.0), (0.0, 1.0, 1.0)]
 
     pts = [(0, 1, 2, 3), (4, 5, 6, 7), (0, 1, 5, 4),
            (1, 2, 6, 5), (2, 3, 7, 6), (3, 0, 4, 7)]
 
-    cube_shape = cube(vertices,pts)
+    cube_shape = cube_with_square(vertices, pts)
 
     FILENAME = 'cube.vtk'
     write_in_file(FILENAME, cube_shape)
@@ -69,5 +71,6 @@ def main():
 
     renWin.Render()
     iren.Start()
+
 
 main()
