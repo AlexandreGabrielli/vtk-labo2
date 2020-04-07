@@ -12,15 +12,8 @@ def read_in_file(filename):
     reader.Update()
     return reader
 
-
-def main():
-    vertices = [(0.0, 0.0, 0.0), (1.0, 0.0, 0.0), (1.0, 1.0, 0.0), (0.0, 1.0, 0.0),
-         (0.0, 0.0, 1.0), (1.0, 0.0, 1.0), (1.0, 1.0, 1.0), (0.0, 1.0, 1.0)]
-
-    pts = [(0, 1, 2, 3), (4, 5, 6, 7), (0, 1, 5, 4),
-           (1, 2, 6, 5), (2, 3, 7, 6), (3, 0, 4, 7)]
-
-    cube = vtk.vtkPolyData()
+def cube(vertices,pts):
+    cube_data = vtk.vtkPolyData()
     points = vtk.vtkPoints()
     polys = vtk.vtkCellArray()
 
@@ -30,12 +23,24 @@ def main():
     for i in range(6):
         polys.InsertNextCell(4, pts[i])
 
-    cube.SetPoints(points)
-    cube.SetPolys(polys)
+    cube_data.SetPoints(points)
+    cube_data.SetPolys(polys)
 
+    return cube_data
+
+
+
+def main():
+    vertices = [(0.0, 0.0, 0.0), (1.0, 0.0, 0.0), (1.0, 1.0, 0.0), (0.0, 1.0, 0.0),
+         (0.0, 0.0, 1.0), (1.0, 0.0, 1.0), (1.0, 1.0, 1.0), (0.0, 1.0, 1.0)]
+
+    pts = [(0, 1, 2, 3), (4, 5, 6, 7), (0, 1, 5, 4),
+           (1, 2, 6, 5), (2, 3, 7, 6), (3, 0, 4, 7)]
+
+    cube_shape = cube(vertices,pts)
 
     FILENAME = 'cube.vtk'
-    write_in_file(FILENAME, cube)
+    write_in_file(FILENAME, cube_shape)
     cube_data = read_in_file(FILENAME)
 
     cubeMapper = vtk.vtkPolyDataMapper()
