@@ -10,8 +10,7 @@ def read_in_file(filename):
     reader = vtk.vtkPolyDataReader()
     reader.SetFileName(filename)
     reader.Update()
-    return reader.GetOutputPort()
-
+    return reader
 
 
 def main():
@@ -40,7 +39,7 @@ def main():
     cube_data = read_in_file(FILENAME)
 
     cubeMapper = vtk.vtkPolyDataMapper()
-    cubeMapper.SetInputConnection(cube_data)
+    cubeMapper.SetInputConnection(cube_data.GetOutputPort())
 
     cubeActor = vtk.vtkActor()
     cubeActor.SetMapper(cubeMapper)
