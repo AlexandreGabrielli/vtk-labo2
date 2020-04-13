@@ -9,12 +9,13 @@ def write_in_file(filename, data):
     writer.Write()
 
 
-def read_in_file(filename):
+def read_from_file(filename):
     # Step 3: Lisez le fichier sauvé au moyen d'un vtkPolyDataReader
     reader = vtk.vtkPolyDataReader()
     reader.SetFileName(filename)
     reader.Update()
     return reader
+
 
 def init_cube(vertices):
     cube_data = vtk.vtkPolyData()
@@ -25,6 +26,7 @@ def init_cube(vertices):
         points.InsertPoint(i, vertices[i])
 
     return cube_data, points, polys
+
 
 def cube_with_square(vertices):
     pts = [(0, 1, 2, 3), (4, 5, 6, 7), (0, 1, 5, 4),
@@ -91,14 +93,20 @@ def main():
     vertices = [(0.0, 0.0, 0.0), (1.0, 0.0, 0.0), (1.0, 1.0, 0.0), (0.0, 1.0, 0.0),
                 (0.0, 0.0, 1.0), (1.0, 0.0, 1.0), (1.0, 1.0, 1.0), (0.0, 1.0, 1.0)]
 
-    # Step 1
-    cube_shape = cube_with_square(vertices)
-    # Step 2
-    # cube_shape = cube_with_triangle(vertices)
-    # Step 5
-    # cube_shape = cube_with_strips()
+    # Change here: to select the proper cube_shape
+    cube_shape = vtk.vtkPolyData()
+    CHOICE = 1
+    if CHOICE == 1:
+        # Step 1
+        cube_shape = cube_with_square(vertices)
+    elif CHOICE == 2:
+        # Step 2
+        cube_shape = cube_with_triangle(vertices)
+    elif CHOICE == 3:
+        # Step 5
+        cube_shape = cube_with_strips()
 
-    # Step 6
+    # Step 6: init
     scalars = vtk.vtkFloatArray()
     for i in range(8):
         scalars.InsertTuple1(i, i)
@@ -107,15 +115,19 @@ def main():
     del scalars
 
     FILENAME = 'cube.vtk'
+    # Step 2
     write_in_file(FILENAME, cube_shape)
-    cube_data = read_in_file(FILENAME)
+    # Step 3
+    cube_data = read_from_file(FILENAME)
 
     cubeMapper = vtk.vtkPolyDataMapper()
     cubeMapper.SetInputConnection(cube_data.GetOutputPort())
-    cubeMapper.SetScalarRange(0, 7)
+    # Step 6: Range
+    cubeMapper.SetScalarRange(0, 10)
 
     cubeActor = vtk.vtkActor()
     cubeActor.SetMapper(cubeMapper)
+    # Uncomment for debugging purposes 
     # cubeActor.GetProperty().FrontfaceCullingOn()
     # cubeActor.GetProperty().BackfaceCullingOn()
 
